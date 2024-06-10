@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class ChatFriend {
     private static String chatbox="Judy:";
-    private static String[] userInputStorage=new String[0]; //This is a fixed size array
+    private static Task[] userInputStorage=new Task[100]; //This is a fixed size array
 
     public static void echo(){
         Scanner in=new Scanner(System.in);
@@ -15,8 +15,20 @@ public class ChatFriend {
             if(readin.equals("list")){
                 listall();
             }
+            else if(readin.contains("done")){
+                String input[]=readin.split(" ");
+                int tasknumber=Integer.parseInt(input[1]);
+                Task tasktochange=userInputStorage[tasknumber-1];
+
+                tasktochange.setDoneToTrue();
+                System.out.println("Nice! I've marked this task as done:");
+                String status=tasktochange.getDone()?"y":"n";
+                String taskformat=String.format("[%s] %s",tasktochange.getStatusIcon(),tasktochange.getTaskname());
+                System.out.println(taskformat);
+            }
             else{
-                addToList(readin);
+                Task newtask=new Task(readin);
+                addToList(newtask);
                 System.out.println(chatbox+readin);
 
             }
@@ -24,19 +36,20 @@ public class ChatFriend {
         }
     }
 
-    public static void addToList(String userInput){
-        //with list number
-        int number= userInputStorage.length+1;
-        userInputStorage= Arrays.copyOf(userInputStorage,number);
-        String inputToStore=number+"."+userInput;
-        userInputStorage[number-1]=inputToStore;
+    public static void addToList(Task newtask){
+        userInputStorage[newtask.getNumber()-1]=newtask;
+
     }
 
     public static void listall(){
-        for(int i=0;i< userInputStorage.length;i++){
-            System.out.println(userInputStorage[i]);
+        for(int i=0;i<Task.getTotalnumber();i++){
+            Task newtask=userInputStorage[i];
+            String taskprint=String.format("%d.[%s] %s", newtask.getNumber(),newtask.getStatusIcon(),newtask.getTaskname());
+            System.out.println(taskprint);
         }
     }
+
+
 
     public static void main(String[] args) {
         String decoration="****--------------------------------------------------****";
