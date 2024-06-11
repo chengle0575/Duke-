@@ -7,26 +7,29 @@ public class ChatFriend {
     private static Task[] userInputStorage=new Task[100]; //This is a fixed size array
     private static final String DECORATION="****--------------------------------------------------****";
 
-    public static void echo(){
+    public static void keepReading(){
         Scanner in=new Scanner(System.in);
         String readin=in.nextLine();
 
         while(!readin.equals("bye")){
-
-            if(readin.equals("list")){
-                listall();
-            }
-            else if(readin.contains("done")){
-                String input[]=readin.split(" ");
-                int tasknumber=Integer.parseInt(input[1]);
-
-                makeTaskDone(tasknumber);
-            }
-            else{
-                addToList(readin);
-            }
+            doAccordingInput(readin);
             readin=in.nextLine();
         }
+    }
+    
+    public static void doAccordingInput(String readin){
+        if(readin.equals("list")){
+            listall();
+        }
+        else if(readin.contains("done")){
+            String input[]=readin.split(" ");
+            int tasknumber=Integer.parseInt(input[1]);
+            makeTaskDone(tasknumber);
+        }
+        else{
+            addToList(readin);
+        }
+
     }
 
     public static void makeTaskDone(int tasknumber){
@@ -71,7 +74,7 @@ public class ChatFriend {
 
     public static void main(String[] args) {
         printhello();
-        echo();
+        keepReading();
         printbye();
     }
 
