@@ -7,9 +7,7 @@ public class ChatFriend {
     private static Task[] userInputStorage=new Task[100]; //This is a fixed size array
     private static final String DECORATION="****--------------------------------------------------****";
 
-
-
-
+    /*---------keep reading the input and do something accordingly-------------*/
     public static void keepReading(){
         Scanner in=new Scanner(System.in);
         String readin=in.nextLine();
@@ -37,7 +35,7 @@ public class ChatFriend {
         }
 
     }
-
+    /*---------parse input to get taskname and tasktime-------------*/
     public static String parseGetTaskName(String readin){
         String[] inputAftSplit=readin.split("/");
         //String nameAft=inputAftSplit[0].replace(inputAftSplit[1],"");
@@ -48,11 +46,17 @@ public class ChatFriend {
 
     public static String parseGetTaskTime(String readin){
         String[] inputAftSplit=readin.split("/");
-        int firstcolon=inputAftSplit[1].indexOf(" ");
-        String tasktime=inputAftSplit[1].substring(firstcolon);
+        String tasktime=null;
+        if(inputAftSplit.length>1){
+            int firstcolon=inputAftSplit[1].indexOf(" ");
+            tasktime=inputAftSplit[1].substring(firstcolon);
+        }
+
         return tasktime;
     }
 
+
+    /*---------manipulate the task status-------------*/
     public static void makeTaskDone(int tasknumber){
         Task tasktochange=userInputStorage[tasknumber-1];
 
@@ -62,6 +66,8 @@ public class ChatFriend {
         System.out.println(taskformat);
     }
 
+
+    /*---------modify task list-------------*/
     public static Task addToList(String readin){
         String taskname=parseGetTaskName(readin);
         String tasktime=parseGetTaskTime(readin);
@@ -93,6 +99,7 @@ public class ChatFriend {
         }
     }
 
+    /*---------greeting and bye-------------*/
     public static void printhello(){
         String greetings=DECORATION+"\n"+
                 CHATBOX+
