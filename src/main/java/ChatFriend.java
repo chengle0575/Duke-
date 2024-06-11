@@ -3,8 +3,9 @@ import java.util.Scanner;
 
 
 public class ChatFriend {
-    private static String chatbox="Judy:";
+    private static final String CHATBOX="Judy:";
     private static Task[] userInputStorage=new Task[100]; //This is a fixed size array
+    private static final String DECORATION="****--------------------------------------------------****";
 
     public static void echo(){
         Scanner in=new Scanner(System.in);
@@ -18,26 +19,29 @@ public class ChatFriend {
             else if(readin.contains("done")){
                 String input[]=readin.split(" ");
                 int tasknumber=Integer.parseInt(input[1]);
-                Task tasktochange=userInputStorage[tasknumber-1];
 
-                tasktochange.setDoneToTrue();
-                System.out.println("Nice! I've marked this task as done:");
-                String status=tasktochange.getDone()?"y":"n";
-                String taskformat=String.format("[%s] %s",tasktochange.getStatusIcon(),tasktochange.getTaskname());
-                System.out.println(taskformat);
+                makeTaskDone(tasknumber);
             }
             else{
-                Task newtask=new Task(readin);
-                addToList(newtask);
-                System.out.println(chatbox+readin);
-
+                addToList(readin);
             }
             readin=in.nextLine();
         }
     }
 
-    public static void addToList(Task newtask){
+    public static void makeTaskDone(int tasknumber){
+        Task tasktochange=userInputStorage[tasknumber-1];
+
+        tasktochange.setDoneToTrue();
+        System.out.println("Nice! I've marked this task as done:");
+        String taskformat=String.format("[%s] %s",tasktochange.getStatusIcon(),tasktochange.getTaskname());
+        System.out.println(taskformat);
+    }
+
+    public static void addToList(String taskname){
+        Task newtask=new Task(taskname);
         userInputStorage[newtask.getNumber()-1]=newtask;
+        System.out.println(CHATBOX+taskname);
 
     }
 
@@ -49,24 +53,26 @@ public class ChatFriend {
         }
     }
 
+    public static void printhello(){
+        String greetings=DECORATION+"\n"+
+                CHATBOX+
+                "Hello! I'm ChatFriend :)\n"+
+                "What can I do for you?";
+        System.out.println(greetings);
+    }
+
+    public static void printbye(){
+        String bye=DECORATION+"\n"
+                +CHATBOX+
+                "Bye. Hope to see you again soon!";
+        System.out.println(bye);
+    }
 
 
     public static void main(String[] args) {
-        String decoration="****--------------------------------------------------****";
-
-        String greetings=decoration+"\n"+
-                         chatbox+
-                        "Hello! I'm ChatFriend :)\n"+
-                        "What can I do for you?";
-        System.out.println(greetings);
-
-
+        printhello();
         echo();
-
-        String bye=decoration+"\n"
-                    +chatbox+
-                   "Bye. Hope to see you again soon!";
-        System.out.println(bye);
+        printbye();
     }
 
 
