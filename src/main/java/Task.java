@@ -40,4 +40,11 @@ public class Task {
     }
 
 
+    @Override
+    public String toString() {
+        return this.taskname;
+    }
+    public Tasktype getType(){
+        return null;
+    }
 }

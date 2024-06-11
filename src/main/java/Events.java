@@ -1,2 +1,19 @@
-package PACKAGE_NAME;public class Events {
+public class Events extends Task{
+
+    private String at;
+
+    public Events(String taskname,String at){
+        super(taskname);
+        this.at=at;
+    }
+
+    public String getAt(){
+        return this.at;
+    }
+    public Tasktype getType(){
+        return Tasktype.EVENT;
+    }
+    public String toString(){
+        return this.getTaskname()+"(at:"+this.getAt() +")";
+    }
 }

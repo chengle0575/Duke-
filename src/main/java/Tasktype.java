@@ -1,2 +1,3 @@
-package PACKAGE_NAME;public enum Tasktype {
+public enum Tasktype {
+    TODO,DEADLINE,EVENT
 }
