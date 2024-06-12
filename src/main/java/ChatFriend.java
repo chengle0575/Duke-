@@ -19,6 +19,7 @@ public class ChatFriend {
     }
     
     public static void doAccordingInput(String readin){
+        try {
             if (readin.equals("list")) {
                 listall();
             } else if (readin.contains("done")) {
@@ -30,8 +31,12 @@ public class ChatFriend {
                 Task addedtask = addToList(readin);
                 System.out.println(CHATBOX + addedtask);
             } else {
-                System.out.println(readin);
+                throw new DukeException();
+                //System.out.println(readin);
             }
+        }catch (DukeException e){
+            System.out.println(CHATBOX+"OOPS!!! I'm sorry, but I don't know what that means :-(");
+        }
 
     }
     /*---------parse input to get taskname and tasktime-------------*/
@@ -85,7 +90,7 @@ public class ChatFriend {
             taskname=parseGetTaskName(readin);
             tasktime=parseGetTaskTime(readin);
         }catch (DukeException e){
-            System.out.println("OOPS!!! The description of a "+cmd+" cannot be empty.");
+            System.out.println(CHATBOX+"OOPS!!! The description of a "+cmd+" cannot be empty.");
             return null;
         }
 
