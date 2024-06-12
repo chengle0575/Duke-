@@ -19,37 +19,45 @@ public class ChatFriend {
     }
     
     public static void doAccordingInput(String readin){
-        if(readin.equals("list")){
-            listall();
-        } else if(readin.contains("done")){
-            String input[]=readin.split(" ");
-            int tasknumber=Integer.parseInt(input[1]);
-            makeTaskDone(tasknumber);
+            if (readin.equals("list")) {
+                listall();
+            } else if (readin.contains("done")) {
+                String input[] = readin.split(" ");
+                int tasknumber = Integer.parseInt(input[1]);
+                makeTaskDone(tasknumber);
 
-        } else if(readin.contains("deadline")|| readin.contains("todo")||readin.contains("event")) {
-            Task addedtask=addToList(readin);
-            System.out.println(CHATBOX+addedtask);
-        }
-        else{
-            System.out.println(readin);
-        }
+            } else if (readin.contains("deadline") || readin.contains("todo") || readin.contains("event")) {
+                Task addedtask = addToList(readin);
+                System.out.println(CHATBOX + addedtask);
+            } else {
+                System.out.println(readin);
+            }
 
     }
     /*---------parse input to get taskname and tasktime-------------*/
-    public static String parseGetTaskName(String readin){
+    public static String parseGetTaskName(String readin) throws DukeException{
         String[] inputAftSplit=readin.split("/");
         //String nameAft=inputAftSplit[0].replace(inputAftSplit[1],"");
         int firstspace=inputAftSplit[0].indexOf(" ");
-        String taskname=inputAftSplit[0].substring(firstspace);
+
+        if(firstspace==-1){
+                throw new DukeException();
+        }
+
+        String taskname = inputAftSplit[0].substring(firstspace);
         return taskname;
     }
 
-    public static String parseGetTaskTime(String readin){
+    public static String parseGetTaskTime(String readin) throws DukeException{
         String[] inputAftSplit=readin.split("/");
         String tasktime=null;
         if(inputAftSplit.length>1){
             int firstcolon=inputAftSplit[1].indexOf(" ");
             tasktime=inputAftSplit[1].substring(firstcolon);
+        }else{
+            if(!readin.split(" ")[0].equals("todo")){
+                throw new DukeException();
+            }
         }
 
         return tasktime;
@@ -69,8 +77,17 @@ public class ChatFriend {
 
     /*---------modify task list-------------*/
     public static Task addToList(String readin){
-        String taskname=parseGetTaskName(readin);
-        String tasktime=parseGetTaskTime(readin);
+        String cmd=readin.split(" ")[0];
+        String taskname=null;
+        String tasktime=null;
+
+        try{
+            taskname=parseGetTaskName(readin);
+            tasktime=parseGetTaskTime(readin);
+        }catch (DukeException e){
+            System.out.println("OOPS!!! The description of a "+cmd+" cannot be empty.");
+            return null;
+        }
 
         Task newtask = null;
 
