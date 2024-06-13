@@ -1,4 +1,6 @@
-public class Deadlines extends Task{
+package duketask;
+
+public class Deadlines extends Task {
     private String by;
 
     public Deadlines(String taskname,String by){

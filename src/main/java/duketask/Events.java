@@ -1,4 +1,6 @@
-public class Events extends Task{
+package duketask;
+
+public class Events extends Task {
 
     private String at;
 

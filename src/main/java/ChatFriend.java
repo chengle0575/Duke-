@@ -1,10 +1,16 @@
-import java.util.Arrays;
+import duketask.Deadlines;
+import duketask.Events;
+import duketask.Task;
+import duketask.ToDos;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
 public class ChatFriend {
     private static final String CHATBOX="Judy:";
-    private static Task[] userInputStorage=new Task[100]; //This is a fixed size array
+    //private static Task[] userInputStorage=new Task[100]; //This is a fixed size array
+    private static ArrayList<Task> userInputStorage=new ArrayList<>();
     private static final String DECORATION="****--------------------------------------------------****";
 
     /*---------keep reading the input and do something accordingly-------------*/
@@ -26,6 +32,11 @@ public class ChatFriend {
                 String input[] = readin.split(" ");
                 int tasknumber = Integer.parseInt(input[1]);
                 makeTaskDone(tasknumber);
+
+            }else if(readin.contains("delete")){
+                String input[] = readin.split(" ");
+                int tasknumber = Integer.parseInt(input[1]);
+                deleteTask(tasknumber);
 
             } else if (readin.contains("deadline") || readin.contains("todo") || readin.contains("event")) {
                 Task addedtask = addToList(readin);
@@ -71,13 +82,14 @@ public class ChatFriend {
 
     /*---------manipulate the task status-------------*/
     public static void makeTaskDone(int tasknumber){
-        Task tasktochange=userInputStorage[tasknumber-1];
+        Task tasktochange=userInputStorage.get(tasknumber-1);
 
         tasktochange.setDoneToTrue();
         System.out.println("Nice! I've marked this task as done:");
         String taskformat=String.format("[%s] %s",tasktochange.getStatusIcon(),tasktochange);
         System.out.println(taskformat);
     }
+
 
 
     /*---------modify task list-------------*/
@@ -109,13 +121,21 @@ public class ChatFriend {
             newtask=new Task(taskname);
         }
 
-        userInputStorage[newtask.getNumber()-1]=newtask;
+        userInputStorage.add(newtask);
         return newtask;
     }
 
+    public static void deleteTask(int tasknumber){
+        Task tasktoDelete=userInputStorage.remove(tasknumber-1);
+        int leftamount=Task.decreaseTotalnumber();
+        System.out.println("Noted. I've removed this task:");
+        String taskprint=String.format("%d.[%s][%s]%s", tasktoDelete.getNumber(),tasktoDelete.getType(),tasktoDelete.getStatusIcon(),tasktoDelete);
+        System.out.println(taskprint);
+        System.out.println("Now you have "+leftamount+" tasks in the list.");
+    }
     public static void listall(){
         for(int i=0;i<Task.getTotalnumber();i++){
-            Task newtask=userInputStorage[i];
+            Task newtask=userInputStorage.get(i);
             String taskprint=String.format("%d.[%s][%s]%s", newtask.getNumber(),newtask.getType(),newtask.getStatusIcon(),newtask);
             System.out.println(taskprint);
         }

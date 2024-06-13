@@ -1,4 +1,7 @@
-public class ToDos extends Task{
+package duketask;
+
+
+public class ToDos extends Task {
 
     public ToDos(String todoname){
         super(todoname);

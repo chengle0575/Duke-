@@ -1,3 +1,4 @@
+package duketask;
 
 public class Task {
 
@@ -20,6 +21,10 @@ public class Task {
     }
 
     public static int getTotalnumber(){
+        return totalnumber;
+    }
+    public static int decreaseTotalnumber(){
+        totalnumber--;
         return totalnumber;
     }
 
