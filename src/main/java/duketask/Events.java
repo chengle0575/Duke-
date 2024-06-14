@@ -9,13 +9,13 @@ public class Events extends Task {
         this.at=at;
     }
 
-    public String getAt(){
+    public String getTime(){
         return this.at;
     }
     public Tasktype getType(){
         return Tasktype.EVENT;
     }
     public String toString(){
-        return this.getTaskname()+"(at:"+this.getAt() +")";
+        return this.getTaskname()+"(at:"+this.getTime()+")";
     }
 }

@@ -8,7 +8,7 @@ public class Deadlines extends Task {
         this.by=by;
     }
 
-    public String getBy(){
+    public String getTime(){
         return this.by;
     }
 
@@ -17,6 +17,6 @@ public class Deadlines extends Task {
     }
 
     public String toString(){
-        return this.getTaskname()+"(by:"+this.by+")";
+        return this.getTaskname()+"(by:"+this.getTime()+")";
     }
 }

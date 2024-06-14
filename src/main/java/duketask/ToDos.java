@@ -14,4 +14,7 @@ public class ToDos extends Task {
     public String toString() {
         return this.getTaskname();
     }
+
+    @Override
+    public String getTime(){ return " ";}
 }

@@ -1,15 +1,13 @@
 package duketask;
 
-public class Task {
+public abstract class Task {
 
     private static int totalnumber=0; //class-level variable
-    private int number;
     private boolean done;
     private String taskname;
 
     //constructor !donot have return type
     public Task(String taskname){
-        this.number=totalnumber+1;
         this.done=false;
         this.taskname=taskname;
 
@@ -26,10 +24,6 @@ public class Task {
     public static int decreaseTotalnumber(){
         totalnumber--;
         return totalnumber;
-    }
-
-    public int getNumber(){
-        return this.number;
     }
 
     public boolean getDone(){
@@ -52,4 +46,7 @@ public class Task {
     public Tasktype getType(){
         return null;
     }
+
+
+    public abstract String getTime();
 }
