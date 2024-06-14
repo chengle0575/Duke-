@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -49,7 +53,7 @@ public class ChatFriend {
                 throw new DukeException();
         }
 
-        String taskname = inputAftSplit[0].substring(firstspace);
+        String taskname = inputAftSplit[0].substring(firstspace).trim();
         return taskname;
     }
 
@@ -57,8 +61,8 @@ public class ChatFriend {
         String[] inputAftSplit=readin.split("/");
         String tasktime=null;
         if(inputAftSplit.length>1){
-            int firstcolon=inputAftSplit[1].indexOf(" ");
-            tasktime=inputAftSplit[1].substring(firstcolon);
+            int spaceindex=inputAftSplit[1].indexOf(" ");
+            tasktime=inputAftSplit[1].substring(spaceindex).trim();
         }else{
             if(!readin.split(" ")[0].equals("todo")){
                 throw new DukeException();
@@ -77,6 +81,8 @@ public class ChatFriend {
         System.out.println("Nice! I've marked this task as done:");
         String taskformat=String.format("[%s] %s",tasktochange.getStatusIcon(),tasktochange);
         System.out.println(taskformat);
+
+        writetoDisk();
     }
 
 
@@ -105,11 +111,13 @@ public class ChatFriend {
         } else if(readin.contains("todo")){
             ToDos todo=new ToDos(taskname);
             newtask=(Task) todo;
-        } else{
+        } /*else{
             newtask=new Task(taskname);
-        }
+        }*/
 
         userInputStorage[newtask.getNumber()-1]=newtask;
+
+        writetoDisk();
         return newtask;
     }
 
@@ -119,6 +127,85 @@ public class ChatFriend {
             String taskprint=String.format("%d.[%s][%s]%s", newtask.getNumber(),newtask.getType(),newtask.getStatusIcon(),newtask);
             System.out.println(taskprint);
         }
+    }
+
+
+
+    /*---------disk interaction operation-------------*/
+
+    public static File initfile() throws IOException{
+        File f=new File("../disksaving/duketask.txt");
+        if(!f.exists()){
+                System.out.println("file not exist. create now");
+                String newdirectory = "../disksaving";
+                File newdir = new File(newdirectory);
+                newdir.mkdirs();
+
+                String newfile = "../disksaving/duketask.txt";
+                File newf = new File(newfile);
+                newf.createNewFile();
+        }
+        return f;
+    }
+    public static void writetoDisk(){
+        try {
+            File f = initfile();
+            FileWriter filewriter = new FileWriter(f);
+            for(int i=0;i<Task.getTotalnumber();i++) {
+                Task tosave=userInputStorage[i];
+                filewriter.write(tosave.getType()+"|"+tosave.getDone()+"|"+tosave.getTaskname()+"|"+tosave.getTime());
+                filewriter.write("/r");
+            }
+            filewriter.close();
+        }catch (IOException ioe){
+            System.out.println("IO exception happened");
+        }
+    }
+
+    public static String loadfromDisk(){
+        String readfromdisk = "";
+        try {
+            File f = initfile();
+            Scanner s = new Scanner(f);
+            while (s.hasNext()) {
+                readfromdisk += s.nextLine();
+            }
+        }catch (IOException ioe){
+            System.out.println("IO exception happened");
+        }
+        if(!readfromdisk.equals("")) {
+            refilluserInputStorage(readfromdisk);
+        }
+        return readfromdisk;
+    }
+
+    public static void refilluserInputStorage(String s){
+        String[] taskstringArray=s.split("/r");
+
+        for(int i=0;i<taskstringArray.length;i++){
+            Task taskback=parsetoTask(taskstringArray[i]);
+            userInputStorage[i]=taskback;
+        }
+    }
+
+    public static Task parsetoTask(String s){
+        String[] aftsplit=s.split("\\|");
+        String tasktype=aftsplit[0];
+        String isdone=aftsplit[1];
+        String taskname=aftsplit[2];
+        String tasktime=aftsplit[3];
+        Task tasktoreturn=null;
+        if(tasktype.equals("TODO")){
+            tasktoreturn=new ToDos(taskname);
+        }else if(tasktype.equals("DEADLINE")){
+            tasktoreturn=new Deadlines(taskname,tasktime);
+        }else if(tasktype.equals("EVENT")){
+            tasktoreturn=new Events(taskname,tasktime);
+        }
+        if(isdone.equals("true")){
+            tasktoreturn.setDoneToTrue();
+        }
+        return tasktoreturn;
     }
 
     /*---------greeting and bye-------------*/
@@ -139,6 +226,7 @@ public class ChatFriend {
 
 
     public static void main(String[] args) {
+        loadfromDisk();
         printhello();
         keepReading();
         printbye();

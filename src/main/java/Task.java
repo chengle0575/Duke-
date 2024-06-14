@@ -1,5 +1,5 @@
 
-public class Task {
+public abstract class Task {
 
     private static int totalnumber=0; //class-level variable
     private int number;
@@ -47,4 +47,7 @@ public class Task {
     public Tasktype getType(){
         return null;
     }
+
+
+    public abstract String getTime();
 }
